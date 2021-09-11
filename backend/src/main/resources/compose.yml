@@ -1,0 +1,39 @@
+version: '3'
+
+services:
+  postgres-dsvendas:
+    container_name: db-dsvendas
+    image: postgres
+    environment:
+      POSTGRES_USER: "postgres"
+      POSTGRES_PASSWORD: "123456"
+      POSTGRES_DB: "dsvendas"
+    ports:
+      - "15432:5432"
+    volumes:
+      - dsvendas_db_data:/var/lib/postgresql/data
+    networks:
+      - network-dsvendas
+
+  pgadmin-dsvendas:
+    container_name: pgadmin-dsvendas
+    image: dpage/pgadmin4
+    environment:
+      PGADMIN_DEFAULT_EMAIL: "admin@docker.com"
+      PGADMIN_DEFAULT_PASSWORD: "admin"
+    ports:
+      - "16543:80"
+    depends_on:
+      - postgres-dsvendas
+    networks:
+      - network-dsvendas
+
+networks:
+  network-dsvendas:
+    name: nwk-dsvendas
+    driver: bridge
+
+volumes:
+  dsvendas_db_data:
+    name: dsvendas_db_data
+    driver: local
